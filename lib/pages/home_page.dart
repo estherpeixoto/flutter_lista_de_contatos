@@ -80,6 +80,16 @@ class _HomePageState extends State<HomePage> {
                           child: ListTile(
                             title: Text(contact.name),
                             subtitle: Text(contact.phone),
+                            leading: contact.avatar == ''
+                                ? CircleAvatar(
+                                    backgroundColor: Colors.blue.shade50,
+                                    child: Text(contact.getInitials()),
+                                  )
+                                : CircleAvatar(
+                                    backgroundColor: Colors.blue.shade50,
+                                    backgroundImage:
+                                        NetworkImage(contact.avatar),
+                                  ),
                             trailing: IconButton(
                               onPressed: () async {
                                 await Navigator.push(

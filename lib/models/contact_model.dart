@@ -14,4 +14,12 @@ class ContactModel {
     phone = json['phone'];
     avatar = json['avatar'];
   }
+
+  String getInitials() {
+    var nameSplit = name.split(' ');
+    var firstInitial = nameSplit[0].substring(0, 1);
+    var lastInitial = nameSplit[nameSplit.length - 1].substring(0, 1);
+
+    return '$firstInitial$lastInitial';
+  }
 }
