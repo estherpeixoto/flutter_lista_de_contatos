@@ -14,8 +14,8 @@ class ContactsRepository {
     for (var element in result) {
       contactsModel.add(ContactModel(
         int.parse(element['id'].toString()),
-        element['phone'].toString(),
         element['name'].toString(),
+        element['phone'].toString(),
         element['avatar'].toString(),
       ));
     }
@@ -44,7 +44,7 @@ class ContactsRepository {
     );
   }
 
-  Future<void> remover(int id) async {
+  Future<void> delete(int id) async {
     var db = await SQLiteDatabase().getDatabase();
     await db.rawInsert('DELETE FROM contacts WHERE id = ?', [id]);
   }

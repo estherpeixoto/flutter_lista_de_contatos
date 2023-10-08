@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
 
                         return Dismissible(
                           onDismissed:
-                              (DismissDirection dismissDirection) async {},
+                              (DismissDirection dismissDirection) async {
+                            await contactsRepository.delete(contact.id);
+                          },
                           direction: DismissDirection.startToEnd,
                           background: Container(
                             padding: const EdgeInsets.only(left: 20.0),

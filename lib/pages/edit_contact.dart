@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_de_contatos/models/contact_model.dart';
+import 'package:lista_de_contatos/repositories/contacts_repository.dart';
 
 class EditContact extends StatefulWidget {
   ContactModel contact = ContactModel.empty();
@@ -11,6 +12,8 @@ class EditContact extends StatefulWidget {
 }
 
 class _EditContactState extends State<EditContact> {
+  var contactsRepository = ContactsRepository();
+
   var idController = TextEditingController(text: '');
   var nameController = TextEditingController(text: '');
   var phoneController = TextEditingController(text: '');
@@ -35,6 +38,15 @@ class _EditContactState extends State<EditContact> {
         actions: [
           TextButton(
             onPressed: () async {
+              await contactsRepository.update(
+                ContactModel(
+                  int.parse(idController.text),
+                  nameController.text,
+                  phoneController.text,
+                  avatarController.text,
+                ),
+              );
+
               if (context.mounted) {
                 Navigator.pop(context);
               }

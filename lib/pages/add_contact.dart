@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lista_de_contatos/models/contact_model.dart';
+import 'package:lista_de_contatos/repositories/contacts_repository.dart';
 
 class AddContact extends StatefulWidget {
   const AddContact({super.key});
@@ -8,6 +10,8 @@ class AddContact extends StatefulWidget {
 }
 
 class _AddContactState extends State<AddContact> {
+  var contactsRepository = ContactsRepository();
+
   var idController = TextEditingController(text: '0');
   var nameController = TextEditingController(text: '');
   var phoneController = TextEditingController(text: '');
@@ -27,6 +31,15 @@ class _AddContactState extends State<AddContact> {
         actions: [
           TextButton(
             onPressed: () async {
+              await contactsRepository.insert(
+                ContactModel(
+                  int.parse(idController.text),
+                  nameController.text,
+                  phoneController.text,
+                  avatarController.text,
+                ),
+              );
+
               if (context.mounted) {
                 Navigator.pop(context);
               }
