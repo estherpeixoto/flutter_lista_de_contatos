@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lista_de_contatos/models/contacts_model.dart';
 import 'package:lista_de_contatos/pages/add_contact.dart';
@@ -5,10 +7,10 @@ import 'package:lista_de_contatos/pages/edit_contact.dart';
 import 'package:lista_de_contatos/repositories/contacts_repository.dart';
 
 /*
- * @todo Listar contatos
- * @todo Cadastrar contato
- * @todo Editar contato
- * @todo Excluir contato
+ * @done Listar contatos
+ * @done Cadastrar contato
+ * @done Editar contato
+ * @done Excluir contato
  * @todo Usar câmera/galeria, cortar a imagem e salvar o caminho dela no banco
  */
 class HomePage extends StatefulWidget {
@@ -62,6 +64,14 @@ class _HomePageState extends State<HomePage> {
                           onDismissed:
                               (DismissDirection dismissDirection) async {
                             await contactsRepository.delete(contact.id);
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Contato excluído'),
+                                ),
+                              );
+                            }
                           },
                           direction: DismissDirection.startToEnd,
                           background: Container(
@@ -87,8 +97,9 @@ class _HomePageState extends State<HomePage> {
                                   )
                                 : CircleAvatar(
                                     backgroundColor: Colors.blue.shade50,
-                                    backgroundImage:
-                                        NetworkImage(contact.avatar),
+                                    backgroundImage: FileImage(
+                                      File(contact.avatar),
+                                    ),
                                   ),
                             trailing: IconButton(
                               onPressed: () async {
