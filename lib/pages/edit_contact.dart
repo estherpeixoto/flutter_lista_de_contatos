@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lista_de_contatos/models/contact_model.dart';
 import 'package:lista_de_contatos/repositories/contacts_repository.dart';
 import 'package:lista_de_contatos/services/avatar_service.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EditContact extends StatefulWidget {
   ContactModel contact = ContactModel.empty();
@@ -38,26 +40,16 @@ class _EditContactState extends State<EditContact> {
   }
 
   handleCropImage(XFile imageFile) async {
-    try {
-      AvatarService avatarService = AvatarService();
-      String path = await avatarService.cropImage(imageFile);
+    AvatarService avatarService = AvatarService();
+    String path = await avatarService.cropImage(imageFile);
 
-      if (path == '') {
-        photo = null;
-      } else {
-        photo = XFile(path);
-      }
-
-      setState(() {});
-    } on GalException catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.type.message),
-          ),
-        );
-      }
+    if (path == '') {
+      photo = null;
+    } else {
+      photo = XFile(path);
     }
+
+    setState(() {});
   }
 
   @override
@@ -101,7 +93,29 @@ class _EditContactState extends State<EditContact> {
                         ListTile(
                           leading: const Icon(Icons.camera_alt),
                           title: const Text('Câmera'),
-                          onTap: () {},
+                          onTap: () async {
+                            final ImagePicker _picker = ImagePicker();
+
+                            photo = await _picker.pickImage(
+                              source: ImageSource.camera,
+                            );
+
+                            if (photo != null) {
+                              var appDirectory =
+                                  await getApplicationDocumentsDirectory();
+                              String path = appDirectory.path;
+                              String name = basename(photo!.path);
+                              await photo!.saveTo("$path/$name");
+
+                              await Gal.putImage(photo!.path);
+
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+
+                              handleCropImage(photo!);
+                            }
+                          },
                         ),
                         ListTile(
                           leading: const Icon(Icons.image),
