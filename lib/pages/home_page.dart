@@ -11,7 +11,7 @@ import 'package:lista_de_contatos/repositories/contacts_repository.dart';
  * @done Cadastrar contato
  * @done Editar contato
  * @done Excluir contato
- * @todo Usar câmera/galeria, cortar a imagem e salvar o caminho dela no banco
+ * @done Usar câmera/galeria, cortar a imagem e salvar o caminho dela no banco
  */
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
